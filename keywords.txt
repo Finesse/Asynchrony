@@ -1,0 +1,15 @@
+# Asynchrony
+
+Asynchrony	KEYWORD1
+Listener	KEYWORD1
+identificator	KEYWORD1
+Asyn	KEYWORD2
+addListener	KEYWORD2
+loop	KEYWORD2
+
+
+# Listeners
+
+Click	KEYWORD1
+Interval	KEYWORD1
+Timeout	KEYWORD1
