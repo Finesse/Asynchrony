@@ -11,7 +11,7 @@ namespace Asynchrony {
 
 	class Timeout : public Interval {
 		public:
-			Timeout(unsigned long time, char timeUnit = Interval::MILLISECOND) : Interval(time, timeUnit) {};
+			Timeout(unsigned long time, char timeUnit = MILLISECOND);
 
 			virtual bool check(bool *selfDestruct);
 	};

@@ -5,9 +5,9 @@
 
 
 #if defined(ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
+	#include <Arduino.h>
 #else
-  #include <WProgram.h>
+	#include <WProgram.h>
 #endif
 
 #include <utility/Listener.h>
@@ -16,11 +16,15 @@
 
 namespace Asynchrony {
 
+	const char UNDEFINED = -1;
+
 	class Click : public Listener {
 		public:
-			Click(int pin, bool pullup = false, bool eventState = HIGH, unsigned long bounce = 10000);
+			Click(int pin, bool eventState = HIGH, char mode = UNDEFINED, unsigned long bounce = DEFAULT_BOUNCE);
 
 			virtual bool check(bool *selfDestruct);
+
+			static const unsigned long DEFAULT_BOUNCE = 10000;
 
 		protected:
 			// Пин входного сигнала

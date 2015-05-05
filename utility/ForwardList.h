@@ -4,8 +4,9 @@
 
 
 #ifndef NULL
-#define NULL 0
+	#define NULL 0
 #endif
+
 
 
 namespace Asynchrony {
@@ -21,16 +22,14 @@ namespace Asynchrony {
 
 			class Iterator {
 				public:
+
 					static const char TYPE_NORMAL = 0;
 					static const char TYPE_BEGIN = 1;
 					static const char TYPE_END = 2;
 
 
 
-					Iterator(Item *itm, char tp = TYPE_NORMAL) {
-						item = itm;
-						type = tp;
-					}
+					Iterator(Item *itm, char tp = TYPE_NORMAL) : item(itm), type(tp) {}
 
 
 

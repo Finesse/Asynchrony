@@ -4,13 +4,9 @@
 
 namespace Asynchrony {
 
-	Click::Click(int pin, bool pullup, bool eventState, unsigned long bounce) {
-		buttonPin = pin;
-		event = eventState;
-		bounceDuration = bounce;
-		state = !eventState;
-
-		pinMode(pin, pullup ? INPUT_PULLUP : INPUT);
+	Click::Click(int pin, bool eventState, char mode, unsigned long bounce) : buttonPin(pin), event(eventState), bounceDuration(bounce), state(!eventState) {
+		if(mode == INPUT_PULLUP || mode == INPUT)
+			pinMode(pin, mode);
 	}
 
 
