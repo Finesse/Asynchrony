@@ -74,7 +74,7 @@ namespace Asynchrony {
 					delete (*itNext).listener;
 				itPrev.eraseAfter();
 				break;
-			} {
+			} else {
 				itPrev = itNext;
 				++itNext;
 			}
