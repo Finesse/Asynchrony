@@ -1,10 +1,14 @@
+/*
+	Help class that creates stack with some features
+*/
+
 #ifndef Asynchrony_ForwardList_h
 #define Asynchrony_ForwardList_h
 
 
 
 #ifndef NULL
-	#define NULL 0
+	#define NULL ((void *)0x0)
 #endif
 
 
@@ -67,7 +71,7 @@ namespace Asynchrony {
 
 
 
-					friend bool operator==(const Iterator& it1, const char b) {
+					friend bool operator==(const Iterator& it1, const void *b) {
 						if(b == NULL)
 							return it1.type == TYPE_END;
 						else
@@ -107,7 +111,7 @@ namespace Asynchrony {
 
 
 			ForwardList() {
-				beforeFirst.next = NULL;
+				beforeFirst.next = (Item *)NULL;
 			}
 
 

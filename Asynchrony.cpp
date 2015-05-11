@@ -1,7 +1,7 @@
 #include <Asynchrony.h>
 
 #ifndef NULL
-	#define NULL 0
+	#define NULL ((void *)0x0)
 #endif
 
 namespace Asynchrony {
