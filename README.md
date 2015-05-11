@@ -4,8 +4,8 @@ Documentation on languages: [english](README.md), [русский](README-RU.md)
 
 Asynchrony is tool for hooking actions to different events by using listeners.
 
-Using asynchrony you can:
-* Add listeners that means assigning action (any function you like) to event (for example, key pressing).
+Using Asynchrony you can:
+* Add listeners that means assigning action (any function you like) to event (for example, button pressing).
 * Remove listener.
 
 Some event listeners are included ([listeners list](#event-listeners)):
@@ -32,10 +32,10 @@ This tool is planform indepanded. Some listeners are platform depanded but they 
 	#include <Asynchrony.h> // Including library
 	using namespace Asynchrony;
 
-	#define BUTTON_PIN 2 // One side of button is connected to this pin, other to ground
+	#define BUTTON_PIN 2 // One button contact is connected to this pin, other to ground
 	#define LED_PIN 3 // LED is connected to it
 
-	bool isOn = false; // Whether LED is on or off
+	bool isOn = false; // Whether button state is on or off
 
 	// Action called on button click
 	voin onClick() {
@@ -47,7 +47,7 @@ This tool is planform indepanded. Some listeners are platform depanded but they 
 
 	// Blinking action called every half second
 	void onTimer() {
-		static state = false;
+		static bool state = false;
 		state = !state;
 		digitalWrite(LED_PIN, state ? HIGH : LOW);
 	}
@@ -78,9 +78,7 @@ Library is contained in namespace `Asynchrony` so you can optionaly add this nam
 
 Each action is done through the global object `Asyn` which is instance of `Asynchrony::Asynchrony` class.
 
-Than add calling of method `Asyn.loop()` in infinite cycle in main program. No delays, sleeps and etc. should be usen in this cycle. Instead of them use [Interval](#interval) or [Timeout](#timeout) listeners.
-
-Example for Arduino:
+Than add calling of method `Asyn.loop()` in infinite cycle in main program. Example for Arduino:
 
 	// ...
 
@@ -88,14 +86,16 @@ Example for Arduino:
 		Asyn.loop();
 	}
 
-#### Adding event
+**Never use any delays, sleeps and etc**. Instead of them use [Interval](#interval) or [Timeout](#timeout) listeners. Otherwise listeners will work not exacly and with delays.
+
+#### Adding event listeners
 
 	Asynchrony::identificator Asyn.add(Asynchrony::Listener* listener, void (*callback)(), int priority = 0)
 
 Parameters:
-* `Asynchrony::Listener* listener` Pointer to event listener object that is instance of one of classes implementing class `Asynchrony::Listener`. [Event listeners list](#event-listeners).
+* `Asynchrony::Listener* listener` Pointer to event listener object that is instance of one of classes implementing class `Asynchrony::Listener`. [Ready event listeners list](#event-listeners).
 * `void (*callback)()` Function called on event triggering.
-* `int priority` Priority of listener. If some listeners trigger event at the same time, callback of the listener with higher priority will be called earlier. Default is `0`.
+* `int priority` Priority of listener. If some listeners trigger event at the same time, callback of the listener with higher priority will be called earlier. Default is 0.
 
 Returns: `Asynchrony::identificator` Listener identificator that is used to remove listener.
 
@@ -141,13 +141,13 @@ Some events listeners can be hooked using quick methods (full documentation is i
 		Asyn.loop();
 	}
 
-#### Removing events
+#### Removing event listeners
 
 	void Asyn.remove(Asynchrony::identificator id, bool deleteListener = true)
 
 Parameters:
 * `Asynchrony::identificator id` Listener identificator given on listener adding.
-* `bool deleteListener` Whether listener object should be deleted and memory should be freed. Default is true. If listener was created using quick method, this parameter must be true, otherwise memory won't be freed and pointer to it will be lost.
+* `bool deleteListener` Whether listener object should be deleted and memory should be released. Default is `true`. If listener was created using quick method, this parameter must be `true`, otherwise memory won't be released and pointer to it will be lost.
 
 Example:
 
@@ -184,7 +184,7 @@ Create class implementing `Asynchrony::Listener` to create your own listener. It
 	virtual bool check(bool *selfDestruct)
 
 It is called in every moment by `Asyn.loop()` and it should check whether event has happened. Parameters:
-* `bool *selfDestruct` — Points to boolean which is default `false`. If set `true` event listener will be removed and is's object will be deleted.
+* `bool *selfDestruct` Points to boolean which is default `false`. If set `true` event listener will be removed and is's object will be deleted.
 
 Returns: `bool` Whether event has happened.
 
@@ -235,12 +235,12 @@ Platforms: Arduino.
 Parameters:
 * `int pin` Button pin.
 * `bool eventState` Button state in which event triggers.
-* `char mode` In which mode button pin should be turned. Variants are: INPUT, INPUT_PULLUP and Asynchrony::UNDEFINED (where pin mode shouldn't be changed). Default is Asynchrony::UNDEFINED.
+* `char mode` In which mode button pin should be turned. Variants are: `INPUT`, `INPUT_PULLUP` and `Asynchrony::UNDEFINED` (where pin mode shouldn't be changed). Default is `Asynchrony::UNDEFINED`.
 * `unsigned long bounce` Bounce duration in microseconds. Default is 10000.
 
 Quick adding:
 
-	Asynchrony::identificator Asyn.click(void (*callback)(), int pin, bool eventState = HIGH, char mode = UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+	Asynchrony::identificator Asyn.click(void (*callback)(), int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
 
 ### Interval
 
