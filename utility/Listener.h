@@ -12,10 +12,10 @@ namespace Asynchrony {
 	class Listener {
 		public:
 			/*
-				Must check whether event has happened.
+				Called in every moment. Must check whether event has happened.
 
 				Parameters:
-					bool *selfDestruct — Set the value of variable that this pointer points true to remove event listener from events list.
+					bool *selfDestruct — Points to boolean which is default `false`. If set `true` event listener will be removed and is's object will be deleted.
 
 				Returns:
 					bool — Whether event has happened.

@@ -1,7 +1,7 @@
 /*
 	Asynchrony is tool for hooking actions to different events by using listeners.
 	You can:
-		* Add listeners tham means assigning action (any function you like) to event (for example, key press).
+		* Add listeners that means assigning action (any function you like) to event (for example, key pressing).
 		* Remove listener.
 
 	Some common event listeners are included (list of them is located in this code below). You can create your own listeners by implementing abstract class Listener. Each required file is already included (no need to add extra #include, only #include <Asynchrony.h>).
@@ -21,7 +21,7 @@
 
 
 
-// Arduino listeners
+// Listeners for Arduino
 #if defined(ARDUINO)
 	#include <utility/Click.h>
 	#include <utility/Interval.h>
@@ -61,7 +61,7 @@ namespace Asynchrony {
 			/*
 				Removes event listener.
 
-				Parameter:
+				Parameters:
 					Asynchrony::identificator id — Listener identificator given on listener registration.
 					bool deleteListener — Whether listener object should be deleted. Default is true. If listener was created using quick method, this parameter must be true.
 			*/
@@ -73,7 +73,7 @@ namespace Asynchrony {
 				There are only method for quick event listeners creating below untill protected section.
 			*/
 
-			// Arduino listeners
+			// Listeners for Arduino
 			#if defined(ARDUINO)
 
 				/*
