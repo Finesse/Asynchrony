@@ -209,7 +209,7 @@ Example:
 
 		protected:
 			int *variableToWatch;
-	}
+	};
 
 	// ...
 
