@@ -8,10 +8,10 @@ Using asynchrony you can:
 * Add listeners that means assigning action (any function you like) to event (for example, key pressing).
 * Remove listener.
 
-Some event listeners are included ([listeners list](#event_listeners)):
+Some event listeners are included ([listeners list](#event-listeners)):
 * Arduino listeners.
 
-You can create your own listeners.
+You can also create your own listeners.
 
 This tool is planform indepanded. Some listeners are platform depanded but they are included only if supported by platform.
 
@@ -25,30 +25,67 @@ This tool is planform indepanded. Some listeners are platform depanded but they 
 
 # How to use
 
+## Quick start example
+
+	// For Arduino
+
+	#include <Asynchrony.h> // Including library
+	using namespace Asynchrony;
+
+	#define BUTTON_PIN 2 // One side of button is connected to this pin, other to ground
+	#define LED_PIN 3 // LED is connected to it
+
+	bool isOn = false; // Whether LED is on or off
+
+	// Action called on button click
+	voin onClick() {
+		isOn = !isOn;
+
+		if(!isOn)
+			digitalWrite(LED_PIN, LOW);
+	}
+
+	// Blinking action called every half second
+	void onTimer() {
+		static state = false;
+		state = !state;
+		digitalWrite(LED_PIN, state ? HIGH : LOW);
+	}
+
+	void setup() {
+		Asyn.click(onClick, BUTTON_PIN, LOW, INPUT_PULLUP); // Hook `onClick` action to button click event
+		Asyn.interval(onTimer, 500); // Make `onTimer` function be called every 500 milleseconds
+	}
+
+	void loop() {
+		Asyn.loop(); // It must be called constantly for tool operation
+	}
+
+[Full event listeners list.](#event-listeners)
+
+
+## Details
+
 First include library header to your program:
 
 	#include <Asynchrony.h>
 
-Each library file is already included so there is no need to add extra `#include`. Don't worry, is won't take effect on size of compiled program bacause compilatore includes only used classes, functions, method, etc.
+Each library file is already included so there is no need to add extra `#include`. Don't worry, is won't take effect on size of compiled program bacause compilator includes only used classes, functions, method, etc.
 
-Library is contained in namespace `Asynchrony` so yiu can optionaly add this namespace:
+Library is contained in namespace `Asynchrony` so you can optionaly add this namespace:
 
 	using namespace Asynchrony
 
 Each action is done through the global object `Asyn` which is instance of `Asynchrony::Asynchrony` class.
 
-Than add calling of method `Asyn.loop()` in infinite cycle in main program. No delays, sleeps and etc. should be usen in this cycle. Instead of them use [Interval](#interval) and [Timeout](#timeout) listeners.
+Than add calling of method `Asyn.loop()` in infinite cycle in main program. No delays, sleeps and etc. should be usen in this cycle. Instead of them use [Interval](#interval) or [Timeout](#timeout) listeners.
 
 Example for Arduino:
 
 	// ...
 
 	void loop() {
-		// ...
-
 		Asyn.loop();
-
-		// ...
 	}
 
 #### Adding event
@@ -56,7 +93,7 @@ Example for Arduino:
 	Asynchrony::identificator Asyn.add(Asynchrony::Listener* listener, void (*callback)(), int priority = 0)
 
 Parameters:
-* `Asynchrony::Listener* listener` Pointer to event listener object that is instance of one of classes implementing class `Asynchrony::Listener`. [Event listeners list](#event_listeners).
+* `Asynchrony::Listener* listener` Pointer to event listener object that is instance of one of classes implementing class `Asynchrony::Listener`. [Event listeners list](#event-listeners).
 * `void (*callback)()` Function called on event triggering.
 * `int priority` Priority of listener. If some listeners trigger event at the same time, callback of the listener with higher priority will be called earlier. Default is `0`.
 
@@ -69,7 +106,7 @@ Example:
 	#include <Asynchrony.h>
 	using namespace Asynchrony;
 
-	function blink() {
+	void blink() {
 		static bool state = false;
 		digitalWrite(3, state);
 		state = !state;
@@ -83,14 +120,14 @@ Example:
 		Asyn.loop();
 	}
 
-Some events listeners can be hooked using quick methods (full documentation is in [event listeners list](#event_listeners)):
+Some events listeners can be hooked using quick methods (full documentation is in [event listeners list](#event-listeners)):
 
 	// For Arduino
 
 	#include <Asynchrony.h>
 	using namespace Asynchrony;
 
-	function blink() {
+	void blink() {
 		static bool state = false;
 		digitalWrite(3, state);
 		state = !state;
@@ -121,13 +158,13 @@ Example:
 
 	identificator blinking;
 
-	function blink() {
+	void blink() {
 		static bool state = false;
 		digitalWrite(3, state);
 		state = !state;
 	}
 
-	function stopBlinking() {
+	void stopBlinking() {
 		Asyn.remove(blinking);
 	}
 
@@ -142,9 +179,7 @@ Example:
 
 #### Creating custom event listener
 
-Create class implementing `Asynchrony::Listener` to create your own listener.
-
-`Asynchrony::Listener` contains only one method to implement:
+Create class implementing `Asynchrony::Listener` to create your own listener. It contains only one method to implement:
 	
 	virtual bool check(bool *selfDestruct)
 
@@ -180,7 +215,7 @@ Example:
 
 	int var = 0;
 
-	function action() {
+	void action() {
 		// ...
 	}
 
@@ -189,4 +224,52 @@ Example:
 
 ## Event listeners
 
-Coming soon...
+### Click
+
+Watches button state, filters bounce and triggers event when button is in specified state.
+
+Platforms: Arduino.
+
+	Asynchrony::Click(int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+
+Parameters:
+* `int pin` Button pin.
+* `bool eventState` Button state in which event triggers.
+* `char mode` In which mode button pin should be turned. Variants are: INPUT, INPUT_PULLUP and Asynchrony::UNDEFINED (where pin mode shouldn't be changed). Default is Asynchrony::UNDEFINED.
+* `unsigned long bounce` Bounce duration in microseconds. Default is 10000.
+
+Quick adding:
+
+	Asynchrony::identificator Asyn.click(void (*callback)(), int pin, bool eventState = HIGH, char mode = UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+
+### Interval
+
+Infinitely triggers events on the same time interval.
+
+Platforms: Arduino.
+
+	Asynchrony::Interval(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+
+Parameters:
+* `unsigned long time` Interval duration in units specified in `timeUnit` parameter.
+* `char timeUnit` Unit in which `time` parameter is specified. Variants: `Asynchrony::MICROSECOND`, `Asynchrony::MILLISECOND` and `Asynchrony::SECOND`. Default is `Asynchrony::MILLISECOND`.
+
+Quick adding:
+
+	Asynchrony::identificator Asyn.interval(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+
+### Timeout
+
+Triggers single event after specified time runs out. After triggering listener is removed.
+
+Platforms: Arduino.
+
+	Asynchrony::Timeout(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+
+Parameters:
+* `unsigned long time` Interval duration in units specified in `timeUnit` parameter.
+* `char timeUnit` Unit in which `time` parameter is specified. Variants: `Asynchrony::MICROSECOND`, `Asynchrony::MILLISECOND` and `Asynchrony::SECOND`. Default is `Asynchrony::MILLISECOND`.
+
+Quick adding:
+
+	Asynchrony::identificator Asyn.timeout(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)

@@ -83,7 +83,7 @@ namespace Asynchrony {
 						void (*callback)() — Function called on event triggering.
 						int pin — Button pin.
 						bool eventState — Button state in which event triggers.
-						char mode — In which mode button pin should be turned. Variants are: INPUT, INPUT_PULLUP and Asynchrony::UNDEFINED (where pin mode shouldnot be changed). Default is Asynchrony::UNDEFINED.
+						char mode — In which mode button pin should be turned. Variants are: INPUT, INPUT_PULLUP and Asynchrony::UNDEFINED (where pin mode shouldn't be changed). Default is Asynchrony::UNDEFINED.
 						unsigned long bounce — Bounce duration in microseconds. Default is 10000.
 
 					Returns:
