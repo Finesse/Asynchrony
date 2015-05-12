@@ -8,7 +8,7 @@
 
 	Every actions should be done through the global object Asyn which is instanse of Asynchrony class.
 
-	The tool is planform indepanded. Some listeners are platform depanded so they are automaticaly included only if supported by platform.
+	The tool is planform independed. Some listeners are platform depended so they are automaticaly included only if supported by platform.
 
 	1.0
 
@@ -71,7 +71,16 @@ namespace Asynchrony {
 			*/
 			void remove(identificator id, bool deleteListener = true);
 
+			/*
+				Finds out whether listener with specified identificator still exists.
 
+				Parameters:
+					Asynchrony::identificator id — Listener identifiactor.
+
+				Returns:
+					bool Does listener exist
+			*/
+			bool check(identificator id);
 			
 			/*
 				There are only method for quick event listeners creating below untill protected section.

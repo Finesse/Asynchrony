@@ -109,7 +109,7 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 		Asyn.loop();
 	}
 
-Некоторые слушатели событий можно привязать, использую упрощённые методы (полный список можно посмотреть в [списке слушателей](#Список-слушателей)):
+Некоторые слушатели событий можно привязать, используя упрощённые методы (полный список можно посмотреть в [списке слушателей](#Список-слушателей)):
 
 	// For Arduino
 
@@ -209,6 +209,27 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 	}
 
 	Asyn.add(new NegativeListener(&var), action);
+
+#### Проверка, существует ли слушатель с указанным идентификатором
+
+	bool Asyn.check(Asynchrony::identificator id)
+
+Пример:
+
+	#include <Asynchrony.h>
+	using namespace Asynchrony;
+
+	void action() {
+		// ...
+	}
+
+	identificator listener = Asyn.timeout(action, 2000);
+
+	// Некоторое время спустя
+
+	if(Asyn.check(identificator)) {
+		// Timeout hasn't passed
+	}
 
 
 ## Список слушателей

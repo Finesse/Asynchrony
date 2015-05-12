@@ -6,7 +6,7 @@ Circuit:
 
 (2) (3) (3)   (8) (9) (10)
  │   │   │     │   │   │
- ▽  ▽  ▽    [/] [/] [/]
+ ▽   ▽   ▽    [/] [/] [/]
  │   │   │     │   │   │
 [R] [R] [R]    ┴   ┴   ┴
  │   │   │
@@ -30,6 +30,14 @@ using namespace Asynchrony;
 
 
 
+// I tried to put all futher stuff to single class, but I failed because passing object method as function argument is impossible
+
+// Timeout listeners identificators
+identificator timeout_1,
+              timeout_2,
+              timeout_3;
+
+
 // Actions on timeout that turn LEDs off. Timeouts are started on button click.
 void onTimeout_1() {
   digitalWrite(LED_1, LOW);
@@ -46,17 +54,30 @@ void onTimeout_3() {
 // Click actions that turn LEDs on and start turning-off timeout.
 void onClick_1() {
   digitalWrite(LED_1, HIGH);
-  Asyn.timeout(onTimeout_1, SHIMMER_DURATION);
+
+  // If button is pressed before LED turns off previuos timeout should be stopped. Otherwise LED will turn off early.
+  if(Asyn.check(timeout_1))
+    Asyn.remove(timeout_1);
+
+  timeout_1 = Asyn.timeout(onTimeout_1, SHIMMER_DURATION);
 }
 
 void onClick_2() {
   digitalWrite(LED_2, HIGH);
-  Asyn.timeout(onTimeout_2, SHIMMER_DURATION);
+
+  if(Asyn.check(timeout_2))
+    Asyn.remove(timeout_2);
+
+  timeout_2 = Asyn.timeout(onTimeout_2, SHIMMER_DURATION);
 }
 
 void onClick_3() {
   digitalWrite(LED_3, HIGH);
-  Asyn.timeout(onTimeout_3, SHIMMER_DURATION);
+
+  if(Asyn.check(timeout_3))
+    Asyn.remove(timeout_3);
+
+  timeout_3 = Asyn.timeout(onTimeout_3, SHIMMER_DURATION);
 }
 
 

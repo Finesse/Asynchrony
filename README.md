@@ -13,10 +13,10 @@ Some event listeners are included ([listeners list](#event-listeners)):
 
 You can also create your own listeners.
 
-This tool is planform indepanded. Some listeners are platform depanded but they are included only if supported by platform.
+This tool is planform independed. Some listeners are platform depended but they are included only if supported by platform.
 
 
-# How to insall
+# How to install
 
 1. Download. Click "Download ZIP" on the right side to do it.
 2. Install. In Arduino IDE: top menu — Sketch — Import Library... — Add Library — choose downloaded ZIP or library directory.
@@ -208,6 +208,27 @@ Example:
 	}
 
 	Asyn.add(new NegativeListener(&var), action);
+
+#### Checking whether listener with specified identificator exists
+
+	bool Asyn.check(Asynchrony::identificator id)
+
+Example:
+
+	#include <Asynchrony.h>
+	using namespace Asynchrony;
+
+	void action() {
+		// ...
+	}
+
+	identificator listener = Asyn.timeout(action, 2000);
+
+	// Some time later
+
+	if(Asyn.check(identificator)) {
+		// Timeout hasn't passed
+	}
 
 
 ## Event listeners

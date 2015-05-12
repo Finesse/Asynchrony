@@ -83,6 +83,17 @@ namespace Asynchrony {
 
 
 
+
+	bool Asynchrony::check(identificator id) {
+		for(ForwardList<ListenerItem>::Iterator it = listeners.begin(); !(it == NULL); ++it)
+			if((*it).id == id)
+				return true;
+
+		return false;
+	}
+
+
+
 	identificator Asynchrony::getIdentificator() {
 		return ++lastIdentificator;
 	}
