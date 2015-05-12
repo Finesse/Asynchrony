@@ -213,8 +213,8 @@ Example:
 ## Event listeners
 
 * [Click](#click)
-* [Interval](#click)
-* [Timeout](#click)
+* [Interval](#interval)
+* [Timeout](#timeout)
 
 ### Click
 
