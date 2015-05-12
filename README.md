@@ -32,29 +32,17 @@ This tool is planform indepanded. Some listeners are platform depanded but they 
 	#include <Asynchrony.h> // Including library
 	using namespace Asynchrony;
 
-	#define BUTTON_PIN 2 // One button contact is connected to this pin, other to ground
-	#define LED_PIN 3 // LED is connected to it
+	#define BUTTON_PIN 2
+	#define LED_PIN 3
 
-	bool isOn = false; // Whether button state is on or off
-
-	// Action called on button click
-	voin onClick() {
-		isOn = !isOn;
-
-		if(!isOn)
-			digitalWrite(LED_PIN, LOW);
-	}
-
-	// Blinking action called every half second
-	void onTimer() {
+	void onClick() {
 		static bool state = false;
 		state = !state;
-		digitalWrite(LED_PIN, state ? HIGH : LOW);
+		digitalWrite(LED_PIN, state);
 	}
 
 	void setup() {
 		Asyn.click(onClick, BUTTON_PIN, LOW, INPUT_PULLUP); // Hook `onClick` action to button click event
-		Asyn.interval(onTimer, 500); // Make `onTimer` function be called every 500 milleseconds
 	}
 
 	void loop() {
@@ -223,6 +211,10 @@ Example:
 
 
 ## Event listeners
+
+* [Click](#click)
+* [Interval](#click)
+* [Timeout](#click)
 
 ### Click
 

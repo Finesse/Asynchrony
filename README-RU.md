@@ -35,26 +35,15 @@ Asynchrony это инструмент для привязки действий 
 	#define BUTTON_PIN 2 // Один контакт кнопки подключен к этому пину, другой к земле
 	#define LED_PIN 3 // К этому контакту подключен светодиод
 
-	bool isOn = false; // Состояние, задаваемое кнопкой: включено или выключено
-
 	// Действие, вызываемое при нажатии кнопки
-	voin onClick() {
-		isOn = !isOn;
-
-		if(!isOn)
-			digitalWrite(LED_PIN, LOW);
-	}
-
-	// Действие, вызываемое каждые пол секунды для мигания
-	void onTimer() {
+	void onClick() {
 		static bool state = false;
 		state = !state;
-		digitalWrite(LED_PIN, state ? HIGH : LOW);
+		digitalWrite(LED_PIN, state);
 	}
 
 	void setup() {
 		Asyn.click(onClick, BUTTON_PIN, LOW, INPUT_PULLUP); // Привязываем функцию `onClick` нажатию кнопки
-		Asyn.interval(onTimer, 500); // Делаем так, чтобы функция `onTimer` вызывалась каждые 500 миллисекунд
 	}
 
 	void loop() {
@@ -223,6 +212,10 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 
 ## Список слушателей
+
+* [Click](#click)
+* [Interval](#click)
+* [Timeout](#click)
 
 ### Click
 
