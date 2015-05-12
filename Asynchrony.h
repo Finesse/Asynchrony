@@ -9,6 +9,10 @@
 	Every actions should be done through the global object Asyn which is instanse of Asynchrony class.
 
 	The tool is planform indepanded. Some listeners are platform depanded so they are automaticaly included only if supported by platform.
+
+	1.0
+
+	http://github.com/FinesseRus/Asynchrony
 */
 
 #ifndef Asynchrony_h

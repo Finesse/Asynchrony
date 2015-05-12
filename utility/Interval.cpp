@@ -25,6 +25,8 @@ namespace Asynchrony {
 				interval = time;
 		}
 
+		targetMicros = lastMicros = micros();
+
 		increaseTarget();
 	}
 
