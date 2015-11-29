@@ -286,3 +286,8 @@ Parameters:
 Quick adding:
 
 	Asynchrony::identificator Asyn.timeout(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+
+
+# License
+
+MIT (do anything you want).

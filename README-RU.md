@@ -287,3 +287,8 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 Создание с помощью упрощённого метода:
 
 	Asynchrony::identificator Asyn.timeout(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+
+
+# Лицензия
+
+MIT (делайте, что хотите).
