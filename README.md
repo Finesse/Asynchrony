@@ -27,27 +27,29 @@ This tool is planform independed. Some listeners are platform depended but they 
 
 ## Quick start example
 
-	// For Arduino
+```c++
+// For Arduino
 
-	#include <Asynchrony.h> // Including library
-	using namespace Asynchrony;
+#include <Asynchrony.h> // Including library
+using namespace Asynchrony;
 
-	#define BUTTON_PIN 2
-	#define LED_PIN 3
+#define BUTTON_PIN 2
+#define LED_PIN 3
 
-	void onClick() {
-		static bool state = false;
-		state = !state;
-		digitalWrite(LED_PIN, state);
-	}
+void onClick() {
+	static bool state = false;
+	state = !state;
+	digitalWrite(LED_PIN, state);
+}
 
-	void setup() {
-		Asyn.click(onClick, BUTTON_PIN, LOW, INPUT_PULLUP); // Hook `onClick` action to button click event
-	}
+void setup() {
+	Asyn.click(onClick, BUTTON_PIN, LOW, INPUT_PULLUP); // Hook `onClick` action to button click event
+}
 
-	void loop() {
-		Asyn.loop(); // It must be called constantly for tool operation
-	}
+void loop() {
+	Asyn.loop(); // It must be called constantly for tool operation
+}
+```
 
 [Full event listeners list.](#event-listeners)
 
@@ -56,29 +58,37 @@ This tool is planform independed. Some listeners are platform depended but they 
 
 First include library header to your program:
 
-	#include <Asynchrony.h>
+```c++
+#include <Asynchrony.h>
+```
 
 Each library file is already included so there is no need to add extra `#include`. Don't worry, is won't take effect on size of compiled program bacause compilator includes only used classes, functions, method, etc.
 
 Library is contained in namespace `Asynchrony` so you can optionaly add this namespace:
 
-	using namespace Asynchrony
+```c++
+using namespace Asynchrony
+```
 
 Each action is done through the global object `Asyn` which is instance of `Asynchrony::Asynchrony` class.
 
 Than add calling of method `Asyn.loop()` in infinite cycle in main program. Example for Arduino:
 
-	// ...
+```c++
+// ...
 
-	void loop() {
-		Asyn.loop();
-	}
+void loop() {
+	Asyn.loop();
+}
+```
 
 **Never use any delays, sleeps and etc**. Instead of them use [Interval](#interval) or [Timeout](#timeout) listeners. Otherwise listeners will work not exacly and with delays.
 
 #### Adding event listeners
 
-	Asynchrony::identificator Asyn.add(Asynchrony::Listener* listener, void (*callback)(), int priority = 0)
+```c++
+Asynchrony::identificator Asyn.add(Asynchrony::Listener* listener, void (*callback)(), int priority = 0)
+```
 
 Parameters:
 * `Asynchrony::Listener* listener` Pointer to event listener object that is instance of one of classes implementing class `Asynchrony::Listener`. [Ready event listeners list](#event-listeners).
@@ -88,50 +98,56 @@ Parameters:
 Returns: `Asynchrony::identificator` Listener identificator that is used to remove listener.
 
 Example:
-	
-	// For Arduino
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+```c++
+// For Arduino
 
-	void blink() {
-		static bool state = false;
-		digitalWrite(3, state);
-		state = !state;
-	}
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	void setup() {
-		Asyn.add(new Interval(1000), blink); // Blink every second
-	}
+void blink() {
+	static bool state = false;
+	digitalWrite(3, state);
+	state = !state;
+}
 
-	void loop() {
-		Asyn.loop();
-	}
+void setup() {
+	Asyn.add(new Interval(1000), blink); // Blink every second
+}
+
+void loop() {
+	Asyn.loop();
+}
+```
 
 Some events listeners can be hooked using quick methods (full documentation is in [event listeners list](#event-listeners)):
 
-	// For Arduino
+```c++
+// For Arduino
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	void blink() {
-		static bool state = false;
-		digitalWrite(3, state);
-		state = !state;
-	}
+void blink() {
+	static bool state = false;
+	digitalWrite(3, state);
+	state = !state;
+}
 
-	void setup() {
-		Asyn.interval(blink, 1000); // Blink every second
-	}
+void setup() {
+	Asyn.interval(blink, 1000); // Blink every second
+}
 
-	void loop() {
-		Asyn.loop();
-	}
+void loop() {
+	Asyn.loop();
+}
+```
 
 #### Removing event listeners
 
-	void Asyn.remove(Asynchrony::identificator id, bool deleteListener = true)
+```c++
+void Asyn.remove(Asynchrony::identificator id, bool deleteListener = true)
+```
 
 Parameters:
 * `Asynchrony::identificator id` Listener identificator given on listener adding.
@@ -139,37 +155,41 @@ Parameters:
 
 Example:
 
-	// For Arduino
+```c++
+// For Arduino
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	identificator blinking;
+identificator blinking;
 
-	void blink() {
-		static bool state = false;
-		digitalWrite(3, state);
-		state = !state;
-	}
+void blink() {
+	static bool state = false;
+	digitalWrite(3, state);
+	state = !state;
+}
 
-	void stopBlinking() {
-		Asyn.remove(blinking);
-	}
+void stopBlinking() {
+	Asyn.remove(blinking);
+}
 
-	void setup() {
-		blinking = Asyn.interval(blink, 1000); // Blink every second
-		Asyn.timeout(stopBlinking, 10000); // Stops blinking after 10 seconds
-	}
+void setup() {
+	blinking = Asyn.interval(blink, 1000); // Blink every second
+	Asyn.timeout(stopBlinking, 10000); // Stops blinking after 10 seconds
+}
 
-	void loop() {
-		Asyn.loop();
-	}
+void loop() {
+	Asyn.loop();
+}
+```
 
 #### Creating custom event listener
 
 Create class implementing `Asynchrony::Listener` to create your own listener. It contains only one method to implement:
-	
-	virtual bool check(bool *selfDestruct)
+
+```c++	
+virtual bool check(bool *selfDestruct)
+```
 
 It is called in every moment by `Asyn.loop()` and it should check whether event has happened. Parameters:
 * `bool *selfDestruct` Points to boolean which is default `false`. If set `true` event listener will be removed and is's object will be deleted.
@@ -178,57 +198,63 @@ Returns: `bool` Whether event has happened.
 
 Example:
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+```c++
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	// Listeners checkes whether variable is below zero.
-	class NegativeListener : public Listener {
-		public:
-			NegativeListener(int *variable) {
-				variableToWatch = variable;
-			}
+// Listeners checkes whether variable is below zero.
+class NegativeListener : public Listener {
+	public:
+		NegativeListener(int *variable) {
+			variableToWatch = variable;
+		}
 
-			virtual bool check(bool *selfDestruct) {
-				if(*variableToWatch < 0)
-					return true;
-				else
-					return false;
-			}
+		virtual bool check(bool *selfDestruct) {
+			if(*variableToWatch < 0)
+				return true;
+			else
+				return false;
+		}
 
-		protected:
-			int *variableToWatch;
-	};
+	protected:
+		int *variableToWatch;
+};
 
+// ...
+
+int var = 0;
+
+void action() {
 	// ...
+}
+```
 
-	int var = 0;
-
-	void action() {
-		// ...
-	}
-
-	Asyn.add(new NegativeListener(&var), action);
+Asyn.add(new NegativeListener(&var), action);
 
 #### Checking whether listener with specified identificator exists
 
-	bool Asyn.check(Asynchrony::identificator id)
+```c++
+bool Asyn.check(Asynchrony::identificator id)
+```
 
 Example:
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+```c++
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	void action() {
-		// ...
-	}
+void action() {
+	// ...
+}
 
-	identificator listener = Asyn.timeout(action, 2000);
+identificator listener = Asyn.timeout(action, 2000);
 
-	// Some time later
+// Some time later
 
-	if(Asyn.check(identificator)) {
-		// Timeout hasn't passed
-	}
+if(Asyn.check(identificator)) {
+	// Timeout hasn't passed
+}
+```
 
 
 ## Event listeners
@@ -243,7 +269,9 @@ Watches button state, filters bounce and triggers event when button is in specif
 
 Platforms: Arduino.
 
-	Asynchrony::Click(int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```c++
+Asynchrony::Click(int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```
 
 Parameters:
 * `int pin` Button pin.
@@ -253,7 +281,9 @@ Parameters:
 
 Quick adding:
 
-	Asynchrony::identificator Asyn.click(void (*callback)(), int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```c++
+Asynchrony::identificator Asyn.click(void (*callback)(), int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```
 
 ### Interval
 
@@ -261,7 +291,9 @@ Infinitely triggers events on the same time interval.
 
 Platforms: Arduino.
 
-	Asynchrony::Interval(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::Interval(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 Parameters:
 * `unsigned long time` Interval duration in units specified in `timeUnit` parameter.
@@ -269,7 +301,9 @@ Parameters:
 
 Quick adding:
 
-	Asynchrony::identificator Asyn.interval(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::identificator Asyn.interval(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 ### Timeout
 
@@ -277,7 +311,9 @@ Triggers single event after specified time runs out. After triggering listener i
 
 Platforms: Arduino.
 
-	Asynchrony::Timeout(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::Timeout(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 Parameters:
 * `unsigned long time` Interval duration in units specified in `timeUnit` parameter.
@@ -285,7 +321,9 @@ Parameters:
 
 Quick adding:
 
-	Asynchrony::identificator Asyn.timeout(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::identificator Asyn.timeout(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 
 # License

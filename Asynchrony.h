@@ -12,7 +12,7 @@
 
 	1.0
 
-	http://github.com/FinesseRus/Asynchrony
+	http://github.com/Finesse/Asynchrony
 */
 
 #ifndef Asynchrony_h

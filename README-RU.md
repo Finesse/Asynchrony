@@ -27,28 +27,30 @@ Asynchrony это инструмент для привязки действий 
 
 ## Пример для быстрого старта
 
-	// Для Arduino
+```c++
+// Для Arduino
 
-	#include <Asynchrony.h> // Подключаем библиотеку
-	using namespace Asynchrony;
+#include <Asynchrony.h> // Подключаем библиотеку
+using namespace Asynchrony;
 
-	#define BUTTON_PIN 2 // Один контакт кнопки подключен к этому пину, другой к земле
-	#define LED_PIN 3 // К этому контакту подключен светодиод
+#define BUTTON_PIN 2 // Один контакт кнопки подключен к этому пину, другой к земле
+#define LED_PIN 3 // К этому контакту подключен светодиод
 
-	// Действие, вызываемое при нажатии кнопки
-	void onClick() {
-		static bool state = false;
-		state = !state;
-		digitalWrite(LED_PIN, state);
-	}
+// Действие, вызываемое при нажатии кнопки
+void onClick() {
+	static bool state = false;
+	state = !state;
+	digitalWrite(LED_PIN, state);
+}
 
-	void setup() {
-		Asyn.click(onClick, BUTTON_PIN, LOW, INPUT_PULLUP); // Привязываем функцию `onClick` нажатию кнопки
-	}
+void setup() {
+	Asyn.click(onClick, BUTTON_PIN, LOW, INPUT_PULLUP); // Привязываем функцию `onClick` нажатию кнопки
+}
 
-	void loop() {
-		Asyn.loop(); // Этот метод должен вызываться постоянно для работы инструмента
-	}
+void loop() {
+	Asyn.loop(); // Этот метод должен вызываться постоянно для работы инструмента
+}
+```
 
 [Полный список слушателей событий.](#Список-слушателей)
 
@@ -57,7 +59,9 @@ Asynchrony это инструмент для привязки действий 
 
 Первым делом нужно включить в программу заголовочный файл библиотеки:
 
-	#include <Asynchrony.h>
+```c++
+#include <Asynchrony.h>
+```
 
 Каждый файл библиотеки уже включен, поэтому не нужно прописывать дополнительные `#include`. Не беспокойтесь, это не повлияет на размер скомпилированной программы, потому что компилятор включает в неё только те классы, функции, методы и т.д., которые используются в программе.
 
@@ -69,17 +73,21 @@ Asynchrony это инструмент для привязки действий 
 
 Затем добавьте вызов метода `Asyn.loop()` в бексонечный цикл в главной части программы. Пример для Arduino:
 
-	// ...
+```c++
+// ...
 
-	void loop() {
-		Asyn.loop();
-	}
+void loop() {
+	Asyn.loop();
+}
+```
 
 **Никогда не используйте delay'и, sleep'ы и т.п.**. Вместо них используйте слушатели [Interval](#interval) или [Timeout](#timeout). Иначе слушатели будут работать некорректно и с задержками.
 
 #### Добавление слушателей событий
 
-	Asynchrony::identificator Asyn.add(Asynchrony::Listener* listener, void (*callback)(), int priority = 0)
+```c++
+Asynchrony::identificator Asyn.add(Asynchrony::Listener* listener, void (*callback)(), int priority = 0)
+```
 
 Параметры:
 * `Asynchrony::Listener* listener` Указатель на объект слушателя, который является экземпляром одного из классов, наследующего класс `Asynchrony::Listener`. [Список готовых слушателей](#Список-слушателей).
@@ -90,49 +98,55 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Пример:
 	
-	// Для Arduino
+```c++
+// Для Arduino
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	void blink() {
-		static bool state = false;
-		digitalWrite(3, state);
-		state = !state;
-	}
+void blink() {
+	static bool state = false;
+	digitalWrite(3, state);
+	state = !state;
+}
 
-	void setup() {
-		Asyn.add(new Interval(1000), blink); // Мигать каждую секунду
-	}
+void setup() {
+	Asyn.add(new Interval(1000), blink); // Мигать каждую секунду
+}
 
-	void loop() {
-		Asyn.loop();
-	}
+void loop() {
+	Asyn.loop();
+}
+```
 
 Некоторые слушатели событий можно привязать, используя упрощённые методы (полный список можно посмотреть в [списке слушателей](#Список-слушателей)):
 
-	// For Arduino
+```c++
+// For Arduino
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	void blink() {
-		static bool state = false;
-		digitalWrite(3, state);
-		state = !state;
-	}
+void blink() {
+	static bool state = false;
+	digitalWrite(3, state);
+	state = !state;
+}
 
-	void setup() {
-		Asyn.interval(blink, 1000); // Мигать каждую секунду
-	}
+void setup() {
+	Asyn.interval(blink, 1000); // Мигать каждую секунду
+}
 
-	void loop() {
-		Asyn.loop();
-	}
+void loop() {
+	Asyn.loop();
+}
+```
 
 #### Удаление слушателей событий
 
-	void Asyn.remove(Asynchrony::identificator id, bool deleteListener = true)
+```c++
+void Asyn.remove(Asynchrony::identificator id, bool deleteListener = true)
+```
 
 Параметры:
 * `Asynchrony::identificator id` Идентификатор слушателя, полученный при добавлении слушателя.
@@ -140,37 +154,41 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Пример:
 
-	// Для Arduino
+```c++
+// Для Arduino
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	identificator blinking;
+identificator blinking;
 
-	void blink() {
-		static bool state = false;
-		digitalWrite(3, state);
-		state = !state;
-	}
+void blink() {
+	static bool state = false;
+	digitalWrite(3, state);
+	state = !state;
+}
 
-	void stopBlinking() {
-		Asyn.remove(blinking);
-	}
+void stopBlinking() {
+	Asyn.remove(blinking);
+}
 
-	void setup() {
-		blinking = Asyn.interval(blink, 1000); // Мигать каждую секунду
-		Asyn.timeout(stopBlinking, 10000); // Остановить мигание после 10 секунд
-	}
+void setup() {
+	blinking = Asyn.interval(blink, 1000); // Мигать каждую секунду
+	Asyn.timeout(stopBlinking, 10000); // Остановить мигание после 10 секунд
+}
 
-	void loop() {
-		Asyn.loop();
-	}
+void loop() {
+	Asyn.loop();
+}
+```
 
 #### Создание собственного слушателя события
 
 Создайте класс, наслудующий `Asynchrony::Listener`, чтобы создать собственный слушатель. Он содержит только один метод, который нужно реализовать:
-	
-	virtual bool check(bool *selfDestruct)
+
+```c++	
+virtual bool check(bool *selfDestruct)
+```
 
 Он вызывается постоянно при вызове `Asyn.loop()`. Он должен проверять, произошло ли событие. Параметры:
 * `bool *selfDestruct` Указатель на булеву переменную, которая по-умолчанию равна `false`. Если установить её значение `true`, то слушатель и его объект будут удалены.
@@ -179,57 +197,63 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Пример:
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+```c++
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	// Слушатель, который проверяет, меньше ли нуля значение переменной
-	class NegativeListener : public Listener {
-		public:
-			NegativeListener(int *variable) {
-				variableToWatch = variable;
-			}
+// Слушатель, который проверяет, меньше ли нуля значение переменной
+class NegativeListener : public Listener {
+	public:
+		NegativeListener(int *variable) {
+			variableToWatch = variable;
+		}
 
-			virtual bool check(bool *selfDestruct) {
-				if(*variableToWatch < 0)
-					return true;
-				else
-					return false;
-			}
+		virtual bool check(bool *selfDestruct) {
+			if(*variableToWatch < 0)
+				return true;
+			else
+				return false;
+		}
 
-		protected:
-			int *variableToWatch;
-	};
+	protected:
+		int *variableToWatch;
+};
 
+// ...
+
+int var = 0;
+
+void action() {
 	// ...
+}
 
-	int var = 0;
-
-	void action() {
-		// ...
-	}
-
-	Asyn.add(new NegativeListener(&var), action);
+Asyn.add(new NegativeListener(&var), action);
+```
 
 #### Проверка, существует ли слушатель с указанным идентификатором
 
-	bool Asyn.check(Asynchrony::identificator id)
+```c++
+bool Asyn.check(Asynchrony::identificator id)
+```
 
 Пример:
 
-	#include <Asynchrony.h>
-	using namespace Asynchrony;
+```c++
+#include <Asynchrony.h>
+using namespace Asynchrony;
 
-	void action() {
-		// ...
-	}
+void action() {
+	// ...
+}
 
-	identificator listener = Asyn.timeout(action, 2000);
+identificator listener = Asyn.timeout(action, 2000);
 
-	// Некоторое время спустя
+// Некоторое время спустя
 
-	if(Asyn.check(identificator)) {
-		// Timeout hasn't passed
-	}
+if(Asyn.check(identificator)) {
+	// Timeout hasn't passed
+}
+```
 
 
 ## Список слушателей
@@ -244,7 +268,9 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Платформа: Arduino.
 
-	Asynchrony::Click(int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```c++
+Asynchrony::Click(int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```
 
 Параметры:
 * `int pin` Пин кнопки.
@@ -254,7 +280,9 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Создание с помощью упрощённого метода:
 
-	Asynchrony::identificator Asyn.click(void (*callback)(), int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```c++
+Asynchrony::identificator Asyn.click(void (*callback)(), int pin, bool eventState = HIGH, char mode = Asynchrony::UNDEFINED, unsigned long bounce = Asynchrony::Click::DEFAULT_BOUNCE)
+```
 
 ### Interval
 
@@ -262,7 +290,9 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Платформа: Arduino.
 
-	Asynchrony::Interval(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::Interval(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 Параметры:
 * `unsigned long time` Интервал между срабатываниями, выраженный в единицах измерения, указанных в параметре `timeUnit`.
@@ -270,7 +300,9 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Создание с помощью упрощённого метода:
 
-	Asynchrony::identificator Asyn.interval(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::identificator Asyn.interval(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 ### Timeout
 
@@ -278,7 +310,9 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Платформа: Arduino.
 
-	Asynchrony::Timeout(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::Timeout(unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 Параметры:
 * `unsigned long time` Время до срабатывания, выраженное в единицах измерения, указанных в параметре `timeUnit`.
@@ -286,7 +320,9 @@ Returns: `Asynchrony::identificator` Идентификатор слушател
 
 Создание с помощью упрощённого метода:
 
-	Asynchrony::identificator Asyn.timeout(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```c++
+Asynchrony::identificator Asyn.timeout(void (*callback)(), unsigned long time, char timeUnit = Asynchrony::MILLISECOND)
+```
 
 
 # Лицензия
